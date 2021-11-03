@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript">
+        console.log("Un mesaj...");
+        let produs = {
+            nume: "Mere",
+            pret: 1.5,
+            cantitate: 8
+        };
+
+        let produse = [{
+            nume: "Pere",
+            pret: 2.5,
+            cantitate: 6
+        }, {
+            nume: "Caise",
+            pret: 2,
+            cantitate: 3
+        }];
+        produse.push(produs);
+        console.log(produse);
+
+        for (let produs of produse) {
+            produs.valoare = produs.pret * produs.cantitate;
+            //produs = { valoare: produs.pret * produs.cantitate }; -> nu modifica elementele din vector
+        }
+        console.log(produse);
+
+        // Pere (15 lei), Mere (12 lei)
+        let rezultat = produse
+            .filter(item => item.valoare > 10)
+            .map(item => `${item.nume} (${item.valoare} lei)`)
+            .join(", ");
+        console.log(rezultat);
+
+    </script>
+</body>
+</html>

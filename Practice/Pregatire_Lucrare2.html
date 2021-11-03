@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        //2) Scrieți o funcție JavaScript care să primească ca parametru un
+        //obiect(câmpuri nume și salariu) și să adauge datele în tabel.
+        //Apelați funcția cu un obiect de test.
+        let obiect = {
+            nume: "Dulgheru Mihai-Nicolae",
+            salariu: 1000
+        };
+
+        function adaugare(obiect) {
+            let tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            let tr = document.createElement('tr');
+            tbody.appendChild(tr);
+
+            for (let key in obiect) {
+                let td = document.createElement('td');
+                td.innerHTML = obiect[key];
+                tr.appendChild(td);
+            }
+        }
+
+        function aplicatie() {
+            adaugare(obiect);
+
+            //3) Scrieți codul JavaScript care face ca la apăsarea butonului să se
+            //adauge în tabel numele și salariul citite din controalele de tip textbox.
+            //În subsolul tabelului(footer) se va afișa valoarea fondului total de salarii.
+            let date = [obiect];
+            document.querySelector('#btnAdauga').addEventListener('click', () => {
+                let tr = document.createElement('tr');
+
+                let tdNume = document.createElement('td');
+                tdNume.innerHTML = document.querySelector('#nume').value;
+                tr.appendChild(tdNume);
+
+                let tdSalariu = document.createElement('td');
+                tdSalariu.innerHTML = document.querySelector('#salariu').value;
+                tr.appendChild(tdSalariu);
+
+                document.querySelector('tbody').appendChild(tr);
+
+                date.push({
+                    nume: document.querySelector('#nume').value,
+                    salariu: parseInt(document.querySelector('#salariu').value)
+                });
+
+                //if (document.querySelector('tfoot')) {
+                //    let val = parseInt(document.querySelector('span').innerText);
+                //    let newVal = val + parseInt(document.querySelector('#salariu').value);
+                //    document.querySelector('span').innerText = newVal;
+                //} else {
+                //    let tfoot = document.createElement('tfoot');
+                //    let tr = document.createElement('tr');
+                //    tr.innerHTML = `<td colspan="2">Valoarea fondului total de salarii: <span>${document.querySelector('#salariu').value}</span></td>`;
+                //    tfoot.appendChild(tr);
+                //    document.querySelector('table').appendChild(tfoot);
+                //}
+
+                if (!document.querySelector('tfoot')) {
+                    let tfoot = document.createElement('tfoot');
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = '<td colspan="2">Valoarea fondului total de salarii: <span></span></td>';
+                    tfoot.appendChild(tr);
+                    document.querySelector('table').appendChild(tfoot);
+                }
+
+                document.querySelector('span').innerText = date.reduce(
+                    (previousValue, currentValue) => previousValue + currentValue.salariu
+                    , 0
+                );
+
+            });
+
+            //    4) Scrieți codul JavaScript care la click pe un rând din tabel corespunzător
+            //    unei persoane crește salariul acesteia cu 100 de RON.
+            document.querySelector('table').addEventListener('click', e => {
+                if (e.target.tagName === 'TD') {
+                    e.target.parentElement.children[1].innerText = parseInt(e.target.parentElement.children[1].innerText) + 100;
+                    let o = date.find((value) => value.nume === e.target.parentElement.children[0].innerText);
+                    o.salariu += 100;
+
+                    if (document.querySelector('tfoot')) {
+                        document.querySelector('span').innerText = date.reduce(
+                            (previousValue, currentValue) => previousValue + currentValue.salariu
+                            , 0
+                        );
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', aplicatie);
+
+    </script>
+</head>
+<body>
+    <!-- 1) Să se construiască un un document HTML care conține:
+
+    două elemente input de tip textbox cu id-urile nume și salariu;
+    un element input de tip button;
+    un element gol de tip tabel. -->
+    <table>
+        <thead>
+            <tr>
+                <th>Nume</th>
+                <th>Salariu</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <input type="text" id="nume" />
+    <input type="text" id="salariu" />
+    <input type="button" id="btnAdauga" value="Adauga" />
+    <label></label>
+</body>
+</html>

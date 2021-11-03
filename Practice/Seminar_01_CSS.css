@@ -1,0 +1,98 @@
+﻿body {
+    background-color: floralwhite;
+    font-family: Calibri;
+    font-size: 12pt;
+    line-height: normal;
+    margin: 0;
+    padding: 12px;
+}
+
+h1 {
+    background-color: #242c42;
+    color: White;
+    margin: 0;
+    padding: 16px;
+    margin: -16px -16px 32px -16px;
+}
+
+table {
+    border: 1px solid Gray;
+    border-collapse: collapse;
+    text-align: left;
+    width: 60%;
+    float: left;
+}
+
+td, th {
+    padding: 8px 12px;
+    border-bottom: 1px solid Gray;
+}
+
+th {
+    background-color: #EEEEEE;
+}
+
+caption {
+    padding: 8px 12px;
+    border: 1px solid Gray;
+    border-bottom: none;
+    background-color: #E0E0E0;
+    font-weight: bold;
+}
+
+tfoot {
+    background-color: #EEEEEE;
+    font-weight: bold;
+}
+
+form {
+    border: 1px solid Gray;
+    border-radius: 5px;
+    background-color: #EEEEEE;
+    padding: 16px;
+    float: right;
+    width: 30%;
+}
+
+label {
+    display: block;
+    float: left;
+    clear: both;
+    width: 35%;
+}
+
+input {
+    font-size: 12pt;
+    display: block;
+    float: right;
+    width: 60%;
+}
+
+select {
+    font-size: 12pt;
+    float: right;
+    width: 61.3%;
+}
+
+#forma_de_invatamant {
+    width: 100%;
+    clear: both;
+    float: left;
+}
+
+#f {
+    width: auto
+}
+
+#FR, #ID {
+    width: auto;
+    float: left;
+    clear: left;
+}
+
+input[type="submit"] {
+    font-weight: bold;
+    padding: 5px;
+    clear: both;
+    float: left;
+}

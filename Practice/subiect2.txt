@@ -1,0 +1,15 @@
+<!--1) Să se construiască un un document HTML care conține:
+
+două elemente input de tip textbox cu id-urile nume și salariu;
+un element input de tip button;
+un element gol de tip tabel.
+2) Scrieți o funcție JavaScript care să primească ca parametru un 
+    obiect (câmpuri nume și salariu) și să adauge datele în tabel. 
+    Apelați funcția cu un obiect de test.
+
+3) Scrieți codul JavaScript care face ca la apăsarea butonului să se 
+    adauge în tabel numele și salariul citite din controalele de tip textbox. 
+    În subsolul tabelului (footer) se va afișa valoarea fondului total de salarii.
+
+4) Scrieți codul JavaScript care la click pe un rând din tabel corespunzător 
+    unei persoane crește salariul acesteia cu 100 de RON.-->

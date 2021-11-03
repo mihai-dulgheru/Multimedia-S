@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Titlu pagina</title>
+    <link rel="stylesheet" type="text/css" href="Seminar_01_CSS.css" />
+</head>
+<body>
+    <h1>
+        Acesta este un titlu de nivel 1 care contine un cuvant scris cu <strong>bold</strong>, un cuvant scris <em>italic</em>,
+        <br />
+        si un sfarsit de linie.
+        <img style="float: right; margin: -40px 0px 16px 0px;" src="images/newlogo-banner-blue.png" width="126" />
+    </h1>
+
+    <p>
+        Acesta este un paragraf.
+    </p>
+
+    <hr />
+
+    <p>
+        Elementul <strong>hr</strong> reprezintă o pauză tematică la nivel de paragraf.
+    </p>
+
+    <hr />
+
+    <pre>
+    Acesta  este    un paragraf preformatat care    contine un <a href="https://ro.linkedin.com/in/mihai-nicolae-dulgheru">link</a>
+catre pagina mea de LinkedIn.
+    </pre>
+
+    <br />
+
+    <p>
+        Urmatoarele caractere sunt specile in limbajul <strong>HTML</strong>:
+        <ul>
+            <li>&amp;</li>
+            <li>&minus;</li>
+            <li>&lt;</li>
+            <li>&gt;</li>
+            <li>&lowast;</li>
+            <li>etc.</li>
+        </ul>
+    </p>
+
+    <p>
+        In acest semestru vom studia la disciplina <em>Multimedia</em> urmatoarele limbaje de programare:
+        <ol>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+        </ol>
+    </p>
+
+    <br />
+
+    <table border="1">
+        <caption>Resurse</caption>
+
+        <thead>
+            <tr>
+                <th>Link</th>
+                <th>Descriere</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML">MDN - HTML Tutorial</a></td>
+                <td>În special secțiunile: Getting started with HTML, What’s in the head? Metadata in HTML, HTML text fundamentals, Creating hyperlinks, HTML tables, HTML forms.</td>
+            </tr>
+            <tr>
+                <td><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS">MDN - CSS Tutorial</a></td>
+                <td>De urmărit în special secțiunile Introduction to CSS, Styling text, Styling boxes, CSS layout (doar Introduction, Normal Flow, Floats, Positioning).</td>
+            </tr>
+            <tr>
+                <td><a href="https://javascript.info/">JavaScript.info</a></td>
+                <td>Elemente de bază ale limbajului (variabile, obiecte standard, structuri de control, etc).</td>
+            </tr>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="2">Numar resurse: 3</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <br />
+
+    <form action="#" class="controls">
+        <label for="name">Nume: </label>
+        <input name="nume" id="name" value="" />
+        <br />
+        <label for="first_name">Prenume: </label>
+        <input name="prenume" id="first_name" value="" />
+        <br />
+        <label>Sex: </label>
+        <select name="sex">
+            <option value="M">Masculin</option>
+            <option value="F">Feminin</option>
+        </select>
+
+        <br />
+        <label for="id">ID: </label>
+        <input type="text" name="id" id="id" value="" />
+        <br />
+        <label for="pass">Parola: </label>
+        <input type="password" name="password" id="pass" value="" />
+        <br />
+        <div id="forma_de_invatamant">
+            <label id="f">Forma de invatamant: <br /></label>
+            <input type="radio" id="FR" name="forma" /> <label for="FR">CU FRECVENŢĂ<br /></label>
+            <input type="radio" id="ID" name="forma" /> <label for="ID">LA DISTANȚĂ<br /></label>
+        </div>
+
+        <br />
+        <input type="submit" value="Trimite" />
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+﻿<!-- 1) Să se construiască un un document HTML care conține:
+
+trei elemente input de tip textbox cu id-urile prenume, nume și salariu;
+un element input de tip button;
+un element gol de tip tabel.
+2) Scrieți o funcție JavaScript care să primească ca parametru un obiect (câmpuri prenume, nume și salariu) și să adauge datele în tabel. Apelați funcția cu un obiect de test.
+
+3) Scrieți codul JavaScript care face ca la apăsarea butonului să se adauge în tabel prenumele, numele și salariul citite din controalele de tip textbox. În subsolul tabelului (footer) se va afișa salariul maxim.
+
+4) Scrieți codul JavaScript care la click pe un rând din tabel corespunzător unei persoane crește salariul acesteia cu 100 de RON. -->
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        const date = [];
+
+        function afisare() {
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            for (const iterator of date) {
+                const tr = document.createElement('tr');
+                tbody.appendChild(tr);
+                for (const key in iterator) {
+                    const td = document.createElement('td');
+                    td.innerHTML = iterator[key];
+                    tr.appendChild(td);
+                }
+            }
+
+            const tfoot = document.querySelector('tfoot');
+            const tr = document.createElement('tr');
+            tfoot.appendChild(tr);
+            const td = document.createElement('td');
+            tr.appendChild(td);
+            document.querySelector('tfoot td').innerText = `${date.reduce((prev, current) => (prev.salariu > current.salariu) ? prev : current).salariu}`;
+        }
+
+        let obiect = {
+            prenume: "Mihai-Nicolae",
+            nume: "Dulgheru",
+            salariu: 1000
+        };
+
+        function adaugare(obiect) {
+            let thead = document.querySelector('thead');
+            let tr = document.createElement('tr');
+            let thPrenume = document.createElement('th');
+            thPrenume.innerText = 'Prenume';
+            tr.appendChild(thPrenume);
+            let thNume = document.createElement('th');
+            thNume.innerText = 'Nume';
+            tr.appendChild(thNume);
+            let thSalariu = document.createElement('th');
+            thSalariu.innerText = 'Salariu';
+            tr.appendChild(thSalariu);
+            thead.appendChild(tr);
+
+            let tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            tr = document.createElement('tr');
+            tbody.appendChild(tr);
+
+            for (let key in obiect) {
+                let td = document.createElement('td');
+                td.innerHTML = obiect[key];
+                tr.appendChild(td);
+            }
+            date.push(obiect);
+        }
+
+        function aplicatie() {
+            adaugare(obiect);
+
+            document.querySelector('#btnAdauga').addEventListener('click', e => {
+                date.push({
+                    prenume: document.querySelector('#prenume').value,
+                    nume: document.querySelector('#nume').value,
+                    salariu: parseInt(document.querySelector('#salariu').value, 10)
+                });
+                afisare();
+            });
+
+            document.querySelector('table').addEventListener('click', e => {
+                if (e.target.tagName === 'TD') {
+                    e.target.parentElement.children[2].innerText = parseInt(e.target.parentElement.children[2].innerText) + 100;
+                    let o = date.find((value) => value.nume === e.target.parentElement.children[1].innerText
+                        && value.prenume === e.target.parentElement.children[0].innerText
+                    );
+                    o.salariu += 100;
+
+                    afisare();
+                }
+            });
+
+        }
+
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <input type="text" id="prenume" />
+    <input type="text" id="nume" />
+    <input type="text" id="salariu" />
+    <input type="button" id="btnAdauga" value="Adauga" />
+    <table>
+        <thead></thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+    </table>
+</body>
+</html>

@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        function aplicatie() {
+            let canvas = document.querySelector('canvas');
+            let W = canvas.width, H = canvas.height;
+            let context = canvas.getContext('2d');
+
+            let cx = W / 2, cy = H / 2, r = 0.9 * Math.min(W, H) / 2;
+
+            let n = 7200, delta = 2 * Math.PI / n;
+
+            for (let i = 0; i < n; i += 2) {
+                let unghiStart = i * delta;
+                let unghiStop = unghiStart + delta;
+
+                context.fillStyle = `hsla(${i * 360 / n}, 100%, 50%, 0.9)`;
+
+                context.beginPath();
+                context.moveTo(cx, cy);
+                context.arc(cx, cy, r, unghiStart, unghiStop);
+                context.fill();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <canvas width="500" height="450" style="border: 1px solid black"></canvas>
+</body>
+</html>

@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Agenda telefonică</title>
+    <style type="text/css">
+
+        body {
+            font-family: tahoma;
+            font-size: 11pt;
+            line-height: 1.2em;
+            margin: 0;
+            padding: 12px;
+        }
+
+        h1 {
+            background-color: Navy;
+            color: White;
+            margin: 0;
+            padding: 16px;
+            margin: -12px -12px 20px -12px;
+        }
+
+        table {
+            border: 1px solid Gray;
+            border-collapse: collapse;
+            text-align: left;
+            width: 60%;
+            float: left;
+        }
+
+        td, th {
+            padding: 8px 12px;
+            border-bottom: 1px solid Gray;
+        }
+
+        th {
+            background-color: #EEEEEE;
+        }
+
+
+        caption {
+            padding: 8px 12px;
+            border: 1px solid Gray;
+            border-bottom: none;
+            background-color: #E0E0E0;
+            font-weight: bold;
+        }
+
+        tfoot {
+            background-color: #EEEEEE;
+            font-weight: bold;
+        }
+
+
+        form {
+            border: 1px solid Gray;
+            border-radius: 5px;
+            background-color: #EEEEEE;
+            padding: 16px;
+            float: right;
+            width: 30%;
+        }
+
+        label {
+            display: block;
+            float: left;
+            clear: both;
+            width: 35%;
+        }
+
+        input {
+            font-size: 11pt;
+            display: block;
+            float: right;
+            width: 60%;
+            margin: 3px;
+        }
+
+            input[type="button"] {
+                font-weight: bold;
+                padding: 5px;
+            }
+    </style>
+
+    <script type="text/javascript">
+
+        let persoane = [
+            {
+                nume: "Mirel",
+                prenume: "Testescu",
+                telefon: "0712345678"
+            },
+            {
+                nume: "Vasile",
+                prenume: "Scripteanu",
+                telefon: "0712345678"
+            },
+            {
+                nume: "Mirel Bis",
+                prenume: "Testescu",
+                telefon: "0712345678"
+            }
+        ];
+
+        function afisare() {
+            //document.querySelectorAll('tbody tr');
+            let tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            for (let element of persoane) {
+                let rand = document.createElement('tr');
+                tbody.appendChild(rand);
+
+                for (let numeCamp in element) {
+                    let celula = document.createElement('td');
+                    celula.innerText = element[numeCamp];
+                    rand.append(celula);
+                }
+            }
+
+            document.querySelector('tfoot td').innerText = `Număr persoane: ${persoane.length}`;
+        }
+
+        const url = 'http://ase.softmentor.ro/agenda';
+
+        async function afisareDateServer() {
+            let raspuns = await fetch(url);
+            persoane = await raspuns.json();
+            afisare();
+        }
+
+        async function adauga() {
+            let persoana = {
+                nume: document.querySelector('#nume').value,
+                prenume: document.querySelector('#prenume').value,
+                telefon: document.querySelector('#telefon').value
+            };
+            console.log(JSON.stringify(persoana));
+
+            let raspuns = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(persoana)
+            });
+            persoane = await raspuns.json();
+            afisare();
+        }
+
+        async function aplicatie() {
+            persoane = [];
+            afisare();
+
+            afisareDateServer();
+            setInterval(afisareDateServer, 2000);
+
+            document.querySelector('#btnAdauga').addEventListener('click', adauga);
+        }
+
+        //fetch(url).then(raspuns => {
+        //    raspuns.json().then(date => {
+        //        persoane = date;
+        //        afisare();
+        //    });
+        //});
+
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <h1>Agenda telefonică</h1>
+    <table>
+        <caption>
+            Lista persoane
+        </caption>
+        <thead>
+            <tr>
+                <th>Nume</th>
+                <th>Prenume</th>
+                <th>Telefon</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr>
+                <td>Popescu</td>
+                <td>Ion</td>
+                <td>023423222</td>
+            </tr>
+            <tr>
+                <td>Vasilescu</td>
+                <td>Maria</td>
+                <td>073423222</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <!--<td colspan="3">Număr persoane: <span id="id_span">2</span></td>-->
+                <td colspan="3">Număr persoane: 2</td>
+            </tr>
+        </tfoot>
+    </table>
+    <form action="#">
+        <label for="nume">Nume:</label>
+        <input name="nume" id="nume">
+        <label for="prenume">Prenume:</label>
+        <input name="prenume" id="prenume">
+        <label for="Telefon">Telefon:</label>
+        <input name="telefon" id="telefon">
+        <input type="button" id="btnAdauga" value="Adaugă">
+    </form>
+</body>
+</html>

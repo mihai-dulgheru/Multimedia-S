@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <p id="p1">
+        Test 1
+    </p>
+    <p id="p2">
+        Test 1
+    </p>
+
+    <script type="text/javascript">
+        let parinte = document.querySelector("body");
+        //let parinte = document.body;
+        let paragraf = document.createElement("p");
+        paragraf.innerText = "Ana are ";
+
+        let nrMere = document.createElement("strong");
+        nrMere.innerText = "0";
+
+        paragraf.append(nrMere);
+
+        paragraf.append(document.createTextNode(" mere."));
+
+        parinte.append(paragraf);
+
+        // nrMere.remove();
+
+        //paragraf.style.backgroundColor = "silver";
+        //paragraf.style.fontFamily = "Tahoma";
+        paragraf.classList.add("paragraf");
+
+        function incrementare(e) {
+            //console.log("incrementare", e.target);
+            //console.log(e.x, e.y);
+            let valoare = parseInt(nrMere.innerText, 10);   //e.target.querySelector("strong").innerText;
+            nrMere.innerText = (valoare + 1).toString();
+        }
+
+        function decrementare(e) {
+            e.preventDefault();
+
+            let valoare = parseInt(nrMere.innerText, 10);
+            nrMere.innerText = (valoare - 1).toString();
+        }
+
+        paragraf.addEventListener("click", incrementare);
+        paragraf.addEventListener("contextmenu", decrementare);
+
+        paragraf.addEventListener("mouseenter", e => {
+            paragraf.classList.add("selectat");
+        });
+        paragraf.addEventListener("mouseleave", e => {
+            paragraf.classList.remove("selectat");
+        });
+
+        function test(e) {
+            e.target.innerText += "X";
+        }
+
+        document.querySelector("#p1").addEventListener("click", test);
+        document.querySelector("#p2").addEventListener("click", test);
+
+    </script>
+
+    <style type="text/css">
+        .paragraf {
+            background-color: silver;
+            font-family: Tahoma;
+            color: blue;
+            padding: 6px;
+            border: 1px solid black;
+            user-select: none;
+        }
+
+        .selectat {
+            color: red;
+        }
+
+        #p1, #p2 {
+            display: none;
+        }
+    </style>
+
+</body>
+</html>

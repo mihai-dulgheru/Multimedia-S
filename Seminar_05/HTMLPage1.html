@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        function aplicatie() {
+            let canvas = document.querySelector('canvas');
+
+            let W = canvas.width, H = canvas.height;
+            console.log(W, H);
+
+            //canvas.height = 75;
+
+            let context = canvas.getContext('2d');
+            console.log(context);
+
+            context.strokeRect(40, 20, 100, 50);
+            //context.fillRect(40, 20, 100, 50);
+
+            context.font = 'bold 16pt Arial';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillStyle = 'blue';
+
+            context.fillText('Mirel', 40 + 100 / 2, 20 + 50 / 2);
+
+            context.fillRect(40 + 100 / 2, 20 + 50 / 2, 2, 2);
+
+            //context.beginPath();    // sterge lista
+            context.arc(40 + 100 / 2, 20 + 50 / 2, Math.min(100, 50) / 2, 0, 2 * Math.PI);
+            context.stroke();
+            context.beginPath();
+
+            context.fillStyle = 'yellow';
+            context.strokeStyle = 'green';
+            context.lineWidth = 6;
+
+            context.moveTo(3 * W / 4, H / 2);
+            context.lineTo(W, H);
+            context.lineTo(W / 2, H);
+            context.closePath();    //context.lineTo(3 * W / 4, H / 2);
+
+            context.fill();
+            context.stroke();
+        }
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <canvas width="400" height="250" style="border: 1px solid black"></canvas>
+    <!-- !!! Nu modifica NICIODATA coordonatele canvas-ului din CSS, DOAR DIN JavaScript -->
+</body>
+</html>
