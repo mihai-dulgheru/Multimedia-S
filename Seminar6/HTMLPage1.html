@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+
+        function aplicatie() {
+            let canvas = document.querySelector('canvas');
+            let W = canvas.width, H = canvas.height;
+            let context = canvas.getContext('2d');
+
+            let imagine = document.createElement('img');
+            imagine.src = 'dragon.png';
+            console.log('am inceput incarcarea imaginii');
+
+            let l = 1, c = 0;
+            let dx = 10;
+
+            imagine.addEventListener('load', e => {
+                console.log('s-a terminat incarcarea', imagine.naturalWidth, imagine.naturalHeight);
+
+                setInterval(() => {
+                    c = (c + 1) % 3;
+                    dx += 3;
+                    desenare();
+                }, 200);
+
+                //context.drawImage(imagine, 0, 0);
+                //console.log('am desenat imaginea pe canvas');
+
+            });
+
+            function desenare() {
+
+                context.fillStyle = 'lightblue';
+                context.fillRect(0, 0, W, H);
+
+                let iW = imagine.naturalWidth, iH = imagine.naturalHeight;
+
+                let sw = iW / 3;
+                let sh = iH / 4;
+
+                let sx = c * sw;
+                let sy = l * sh;
+
+                let dw = sw / 2;
+                let dh = sh / 2;
+
+                //let dx = 10;
+                let dy = (H - dh) / 2;
+
+                context.drawImage(imagine,
+                    sx, sy, sw, sh, // sursa
+                    dx, dy, dw, dh  // destinatie
+                );
+            }
+
+            //    document.body.appendChild(imagine);
+            //    console.log('am adaugat elementul imagine in body');
+        }
+
+        document.addEventListener('DOMContentLoaded', aplicatie);
+        console.log('sfarsit script');
+    </script>
+</head>
+<body>
+    <canvas width="800" height="250"></canvas>
+</body>
+</html>
