@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+
+        let imagine, canvas, context, W, H;
+        let mx = 0, my = 0, startX = 0, startY = 0;
+        let sx = 0, sy = 0, sw = 0, sh = 0;
+        let inMiscare = false;
+
+        function desenare() {
+            context.fillStyle = 'white';
+            context.fillRect(0, 0, W, H);
+            context.drawImage(imagine, 0, 0);
+            context.fillStyle = 'black';
+            context.font = 'bold 16pt Tahoma';
+            context.fillText(`${mx}, ${my}`, 10, 20);
+            context.setLineDash([5, 3]);
+            // 5 -> lungimea liniei (in px)
+            // 3 -> lungimea spatiului (in px)
+            context.strokeRect(sx, sy, sw, sh);
+        }
+
+        function incarcaImagine(imageSrc) {
+            //console.log(imageSrc);
+            imagine = document.createElement('img');
+            imagine.src = imageSrc;
+            imagine.addEventListener('load', e => {
+                W = canvas.width = imagine.naturalWidth;
+                H = canvas.height = imagine.naturalHeight;
+                context = canvas.getContext('2d');
+
+                setInterval(desenare, 30);
+            });
+        }
+
+        function aplicatie() {
+            document.querySelector('#btnIncarca').addEventListener('click', e => {
+                let controlFisier = document.querySelector('#fisier');
+
+                if (controlFisier.files.length < 1) {
+                    alert('Selectați un fișier!');
+                    returnl;
+                }
+
+                let fileReader = new FileReader();
+                fileReader.readAsDataURL(controlFisier.files[0]);
+                fileReader.addEventListener('load', e => {
+                    //incarcaImagine(e.target.result);
+                    incarcaImagine(fileReader.result);
+                });
+            });
+
+            canvas = document.querySelector('canvas');
+
+            document.addEventListener('mousemove', e => {
+                mx = Math.round(e.x - canvas.getBoundingClientRect().x);
+                my = Math.round(e.y - canvas.getBoundingClientRect().y);
+
+                if (inMiscare) {
+                    sx = Math.min(startX, mx);
+                    sy = Math.min(startY, my);
+                    sw = Math.abs(mx - startX);
+                    sh = Math.abs(my - startY);
+                }
+            });
+
+            canvas.addEventListener('mousedown', e => {
+                inMiscare = true;
+                startX = sx = mx;
+                startY = sy = my;
+                sw = 1;
+                sh = 1;
+            });
+
+            canvas.addEventListener('mouseup', e => {
+                inMiscare = false;
+            });
+
+            document.querySelector('#btnSalveaza').addEventListener('click', e => {
+
+                let canvasSelectie = document.createElement('canvas');
+                canvasSelectie.width = sw;
+                canvasSelectie.height = sh;
+                canvasSelectie.getContext('2d').drawImage(canvas,
+                    sx, sy, sw, sh, // coordonate sursa
+                    0, 0, sw, sh    // coordonate destinatie
+                );
+
+                let link = document.createElement('a');
+                link.download = 'selectie.png';
+                link.href = canvasSelectie.toDataURL();
+                link.click();
+            });
+
+            document.querySelector('#btnEfect').addEventListener('click', e => {
+
+                let canvasImagine = document.createElement('canvas');
+                canvasImagine.width = W;
+                canvasImagine.height = H;
+                let contextImagine = canvasImagine.getContext('2d');
+                contextImagine.drawImage(imagine, 0, 0);
+
+                let imageData = contextImagine.getImageData(sx, sy, sw, sh);
+                let v = imageData.data;
+                for (let i = 0; i < v.length; i += 4) {
+                    v[i + 2] = 255;
+                }
+
+                contextImagine.putImageData(imageData, sx, sy);
+
+                imagine = canvasImagine;
+            });
+        }
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <input type="file" id="fisier" />
+    <input type="button" id="btnIncarca" value="Încarcă fișierul" />
+    <input type="button" id="btnSalveaza" value="Salvează selecția" />
+    <input type="button" id="btnEfect" value="Aplică efect" />
+    <canvas></canvas>
+</body>
+</html>
