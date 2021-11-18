@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        // 1. Model
+        const NESELECTAT = -1;
+
+        let canvas, W, H, context, imagine, mx = 0, my = 0;
+        let w = 250, h = 150;
+        let piese = [], indexSelectat = NESELECTAT, deltaX = 0, deltaY = 0;
+
+        // 2. Desenare
+        function desenare() {
+            // a) inițializare scenă
+            context.drawImage(imagine, 0, 0);
+            context.fillStyle = 'rgba(200, 200, 200, 0.8)';
+            context.fillRect(0, 0, W, H);
+
+            // b) desenare model
+            context.strokeStyle = 'green';
+            context.lineWidth = 3;
+
+            for (let piesa of piese) {
+                context.drawImage(imagine,
+                    piesa.sx, piesa.sy, w, h,
+                    piesa.x, piesa.y, w, h
+                );
+
+                if (indexSelectat !== NESELECTAT && piesa === piese[indexSelectat]) {
+                    context.strokeRect(piesa.x, piesa.y, w, h);
+                }
+
+                if (piesa.gata) {
+                    context.fillStyle = 'rgba(0, 200, 0, 0.3)';
+                    context.fillRect(piesa.x, piesa.y, w, h);
+                }
+            }
+
+            let amCastigat = piese.filter(item => !item.gata).length === 0;
+            if (amCastigat) {
+                context.drawImage(imagine, 0, 0);
+                context.font = 'bold 120pt Tahoma';
+                context.textAlign = 'center';
+                context.textBaseline = 'middle';
+                context.fillText('Ai câștigat!', W / 2, H / 2);
+                context.strokeText('Ai câștigat!', W / 2, H / 2);
+            }
+
+            // c) programare execuție
+            requestAnimationFrame(desenare);
+        }
+
+        // 3. Actualizarea modelului
+        function actualizareModel() {
+            if (indexSelectat !== NESELECTAT) {
+                piese[indexSelectat].x = mx - deltaX;
+                piese[indexSelectat].y = my - deltaY;
+            }
+        }
+
+        // 4. Tratare evenimente
+        function mousemove(e) {
+            mx = Math.round(e.x - canvas.getBoundingClientRect().x);
+            my = Math.round(e.y - canvas.getBoundingClientRect().y);
+        }
+        function mousedown(e) {
+            let esteInPiesa = piesa => piesa.x <= mx && mx <= piesa.x + w &&
+                piesa.y <= my && my <= piesa.y + h;
+
+            for (let index = piese.length - 1; index >= 0; index--) {
+                if (esteInPiesa(piese[index]) && !piese[index].gata) {
+                    let piesa = piese.splice(index, 1)[0];
+                    piese.push(piesa);
+                    indexSelectat = piese.length - 1;
+
+                    deltaX = mx - piesa.x;
+                    deltaY = my - piesa.y;
+
+                    break;
+                }
+            }
+        }
+        function mouseup(e) {
+            if (indexSelectat !== NESELECTAT) {
+
+                let piesa = piese[indexSelectat];
+
+                let distanta = (piesa.x - piesa.sx) * (piesa.x - piesa.sx) +
+                    (piesa.y - piesa.sy) * (piesa.y - piesa.sy);
+                distanta = Math.sqrt(distanta);
+
+                if (distanta < 50) {
+                    piesa.gata = true;
+                    piesa.x = piesa.sx;
+                    piesa.y = piesa.sy;
+                }
+
+                indexSelectat = NESELECTAT;
+            }
+        }
+
+        function aplicatie() {
+            // a) inițializare model
+            imagine = document.createElement('img');
+            imagine.src = 'desert.jpg';
+            imagine.addEventListener('load', e => {
+                canvas = document.querySelector('canvas');
+                W = canvas.width = imagine.naturalWidth;
+                H = canvas.height = imagine.naturalHeight;
+                context = canvas.getContext('2d');
+
+                // creare piese
+                let n = 3; // => n x n piese
+                w = W / n;
+                h = H / n;
+
+                for (let l = 0; l < n; l++) {
+                    for (let c = 0; c < n; c++) {
+                        piese.push(
+                            {
+                                sx: c * w,
+                                sy: l * h,
+                                x: c * w + 100 * Math.random(),  // Math.random() * (W - w)
+                                y: l * h + 100 * Math.random()
+                            }
+                        );
+                    }
+                }
+
+                // b) pornire aplicație
+                desenare();
+                setInterval(actualizareModel, 20);
+
+                document.addEventListener('mousemove', mousemove);
+                document.addEventListener('mousedown', mousedown);
+                document.addEventListener('mouseup', mouseup);
+            });
+
+        }
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <canvas></canvas>
+</body>
+</html>
