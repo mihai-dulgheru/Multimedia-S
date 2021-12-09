@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        // 1. Model
+        let video, videoMic, canvas, context, W, H;
+        let pbh = 40, px = 10, py = 10, pw = 160, ph = 90;
+        let afisareControale = false;
+
+        // 2. Desenare
+        function desenare() {
+            context.drawImage(video, 0, 0);
+
+            if (afisareControale) {
+                context.drawImage(videoMic,
+                    0, 0, W, H,         // sursa
+                    px, py, pw, ph      // destinatie
+                );
+
+                context.fillStyle = 'rgba(120, 120, 120, 0.4)';
+                context.fillRect(0, H - pbh, W, pbh);
+
+                if (video.duration) {
+                    let pbw = W * video.currentTime / video.duration;
+                    context.fillStyle = 'rgba(120, 0, 0, 0.4)';
+                    context.fillRect(0, H - pbh, pbw, pbh);
+                }
+            }
+
+            requestAnimationFrame(desenare);
+        }
+
+        // 4. Tratare evenimente
+        function canvasClick(e) {
+            let mx = e.x - canvas.getBoundingClientRect().x;
+            let my = e.y - canvas.getBoundingClientRect().y;
+
+            let temp = videoMic;
+            videoMic = video;
+            video = temp;
+        }
+
+        function aplicatie() {
+            video = document.querySelector('video');
+            canvas = document.querySelector('canvas');
+            context = canvas.getContext('2d');
+            W = canvas.width; H = canvas.height;
+
+            canvas.addEventListener('mouseenter', e => afisareControale = true);
+            canvas.addEventListener('mouseleave', e => afisareControale = false);
+
+            videoMic = document.createElement('video');
+            videoMic.src = 'media/rio.mp4';
+            videoMic.muted = true;
+            videoMic.autoplay = true;
+            videoMic.loop = true;
+            videoMic.load();
+            videoMic.play();
+
+            canvas.addEventListener('click', canvasClick);
+
+            desenare();
+        }
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <canvas width="640" height="360"></canvas>
+    <video src="media/dog.mp4" muted autoplay loop style="visibility: hidden;"></video>
+</body>
+</html>

@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+
+        // 1. Model
+        let audio, canvas, context, W, H;
+        const buttonSize = 30;
+
+        let getItems = () => [...document.querySelectorAll('li')];
+        let getUrls = () => getItems().map(item => item.dataset.url);
+        let getIndex = () => getItems().findIndex(item => item.style.fontWeight === 'bold');
+        let setIndex = index => {
+            audio.src = getUrls()[index];
+            audio.load();
+            audio.play();
+
+            for (let item of getItems()) {
+                item.style.fontWeight = '';
+            }
+            getItems()[index].style.fontWeight = 'bold';
+        };
+        let setUrl = url => {
+            setIndex(getUrls().indexOf(url));
+        };
+        let avansare = delta => {
+            let index = getIndex();
+            index = index + delta;
+            if (index < 0) {
+                index = getItems().length - 1;
+            } else if (index >= getItems().length) {
+                index = 0;
+            }
+            setIndex(index);
+        };
+
+        // 2. Desenare
+        function desenare() {
+            context.fillStyle = 'black';
+            context.fillRect(0, 0, W, H);
+
+            //context.fillStyle = 'silver';
+            //context.fillText(audio.currentTime.toString(), 10, 15);
+
+            context.fillStyle = 'silver';
+            context.strokeStyle = 'silver';
+            context.lineWidth = 5;
+
+            context.beginPath();
+            context.moveTo(buttonSize, 0);
+            context.lineTo(0, buttonSize / 2);
+            context.lineTo(buttonSize, buttonSize);
+            context.stroke();
+
+            if (audio.paused) {
+                context.beginPath();
+                context.moveTo(buttonSize * 1, 0);
+                context.lineTo(buttonSize * 2, buttonSize / 2);
+                context.lineTo(buttonSize * 1, buttonSize);
+                context.fill();
+            }
+            else {
+                context.fillRect(buttonSize, 0, buttonSize, buttonSize);
+            }
+
+            context.beginPath();
+            context.moveTo(buttonSize * 2, 0);
+            context.lineTo(buttonSize * 3, buttonSize / 2);
+            context.lineTo(buttonSize * 2, buttonSize);
+            context.stroke();
+
+            context.fillStyle = 'silver';
+            context.fillRect(0, H / 2, W, H / 2);
+
+            if (audio.duration) {
+                let pbw = W * audio.currentTime / audio.duration;
+                context.fillStyle = 'blue';
+                context.fillRect(0, H / 2, pbw, H / 2);
+            }
+
+            requestAnimationFrame(desenare);
+        }
+
+        // 4. Tratare evenimente
+        function canvasClick(e) {
+            let mx = e.x - canvas.getBoundingClientRect().x;
+            let my = e.y - canvas.getBoundingClientRect().y;
+
+            if (my > H / 2) {
+                audio.currentTime = audio.duration * mx / W;
+            } else {
+                let buttonIndex = Math.floor(mx / buttonSize);
+                switch (buttonIndex) {
+                    case 0:
+                        avansare(-1);
+                        break;
+                    case 1:
+                        audio.paused ? audio.play() : audio.pause();
+                        break;
+                    case 2:
+                        avansare(1);
+                        break;
+                }
+            }
+        }
+
+        function aplicatie() {
+            audio = document.querySelector('audio');
+            canvas = document.querySelector('canvas');
+            context = canvas.getContext('2d');
+            W = canvas.width; H = canvas.height;
+
+            canvas.addEventListener('click', canvasClick);
+            audio.addEventListener('ended', () => avansare(1));
+
+            for (let item of getItems()) {
+                item.addEventListener('click', e => setUrl(e.target.dataset.url));
+            }
+
+            document.addEventListener('dragover', e => e.preventDefault());
+            document.addEventListener('drop', e => {
+                e.preventDefault();
+
+                for (let fisier of e.dataTransfer.files) {
+                    let item = document.createElement('li');
+                    item.innerText = fisier.name;
+                    item.dataset.url = URL.createObjectURL(fisier);
+                    item.addEventListener('click', e => setUrl(e.target.dataset.url));
+                    document.querySelector('ul').append(item);
+                }
+            });
+
+            desenare();
+        }
+        document.addEventListener('DOMContentLoaded', aplicatie);
+    </script>
+</head>
+<body>
+    <canvas width="360" height="60"></canvas>
+    <ul>
+        <li data-url="media/Waltz2.mp3" style="font-weight: bold;">Waltz</li>
+        <li data-url="media/t.mp3">T</li>
+        <li data-url="media/Schubert.mp3">Schubert</li>
+    </ul>
+    <audio src="media/Waltz2.mp3" controls></audio>
+</body>
+</html>
